@@ -166,6 +166,8 @@ class SparkCustomWriter(MLWriter):
             print([type(ob) for ob in self._other_objects])
             data_path = path / "data_joblib.gz"
             print('Data path is', data_path)
+            import os
+            print('s3 data_joblib.gz exists', os.path.isfile(data_path))
             self.writer_func(self._other_objects, str(data_path))
 
         # store spark objects (that don't work with json dump) by calling write().save()
