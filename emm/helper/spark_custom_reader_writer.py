@@ -162,10 +162,14 @@ class SparkCustomWriter(MLWriter):
 
         # flexibility to use joblib.dump, e.g. works for numpy arrays
         if len(self._other_objects) > 0:
+            print('self._other_objects len is', len(self._other_objects))
+            print([type(ob) for ob in self._other_objects])
             data_path = path / "data_joblib.gz"
+            print('Data path is', data_path)
             self.writer_func(self._other_objects, str(data_path))
 
         # store spark objects (that don't work with json dump) by calling write().save()
+        print('after writer func')
         for key, spark_obj in self._spark_objects.items():
             if callable(getattr(spark_obj, "write", None)):
                 obj_path = path / key
@@ -177,6 +181,7 @@ class SparkCustomWriter(MLWriter):
         # store spark dfs as files in `file_format`
         for key, sdf in self._spark_dfs.items():
             sdf_path = path / key
+            print('sdf_path is', sdf_path)
             sdf.write.save(str(sdf_path), format=self.file_format, **self.store_kws)
 
     def _get_metadata_to_save(self):
