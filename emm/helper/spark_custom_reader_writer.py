@@ -167,6 +167,7 @@ class SparkCustomWriter(MLWriter):
             data_path = path / "data_joblib.gz"
             print('Data path is', data_path)
             import os
+            print('s3 spark path exists', os.path.isdir(path))
             print('s3 data_joblib.gz exists', os.path.isfile(data_path))
             self.writer_func(self._other_objects, str(data_path))
 
@@ -185,6 +186,9 @@ class SparkCustomWriter(MLWriter):
             sdf_path = path / key
             print('sdf_path is', sdf_path)
             sdf.write.save(str(sdf_path), format=self.file_format, **self.store_kws)
+            print('done storing', sdf_path)
+
+        print('out of loop')    
 
     def _get_metadata_to_save(self):
         """Helper for :py:meth:`DefaultParamsWriter.saveMetadata` which extracts the JSON to save.
