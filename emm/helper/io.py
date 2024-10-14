@@ -37,6 +37,7 @@ if spark_installed:
 
 
 def _spark_load_from_s3(path: str) -> object:
+    print("loading spark from s3 io.py")
     spark = SparkSession.builder.getOrCreate()
     file = spark.sparkContext.binaryFiles(path)
     return file.collect()[0][1]
@@ -151,5 +152,6 @@ class IOFunc:
 
 
 def save_file(file_path, obj, dump_func=pickle.dump, **kwargs):
+    print("save file called from io.py")
     with open(file_path, "wb") as f_out:
         dump_func(obj, f_out, **kwargs)

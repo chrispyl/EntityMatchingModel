@@ -162,17 +162,18 @@ class SparkCustomWriter(MLWriter):
 
         # flexibility to use joblib.dump, e.g. works for numpy arrays
         if len(self._other_objects) > 0:
-            print('self._other_objects len is', len(self._other_objects))
+            print("self._other_objects len is", len(self._other_objects))
             print([type(ob) for ob in self._other_objects])
             data_path = path / "data_joblib.gz"
-            print('Data path is', data_path)
+            print("Data path is", data_path)
             import os
-            print('s3 spark path exists', os.path.isdir(path))
-            print('s3 data_joblib.gz exists', os.path.isfile(data_path))
+
+            print("s3 spark path exists", os.path.isdir(path))
+            print("s3 data_joblib.gz exists", os.path.isfile(data_path))
             self.writer_func(self._other_objects, str(data_path))
 
         # store spark objects (that don't work with json dump) by calling write().save()
-        print('after writer func')
+        print("after writer func")
         for key, spark_obj in self._spark_objects.items():
             if callable(getattr(spark_obj, "write", None)):
                 obj_path = path / key
@@ -184,11 +185,11 @@ class SparkCustomWriter(MLWriter):
         # store spark dfs as files in `file_format`
         for key, sdf in self._spark_dfs.items():
             sdf_path = path / key
-            print('sdf_path is', sdf_path)
+            print("sdf_path is", sdf_path)
             sdf.write.save(str(sdf_path), format=self.file_format, **self.store_kws)
-            print('done storing', sdf_path)
+            print("done storing", sdf_path)
 
-        print('out of loop')    
+        print("out of loop")
 
     def _get_metadata_to_save(self):
         """Helper for :py:meth:`DefaultParamsWriter.saveMetadata` which extracts the JSON to save.
@@ -196,6 +197,7 @@ class SparkCustomWriter(MLWriter):
 
         .. note:: :py:meth:`DefaultParamsWriter.saveMetadata` for details on what this includes.
         """
+        print("saving in _get_metadata_to_save")
         uid = self.instance.uid if hasattr(self.instance, "uid") else 0
         cls = self.instance.__module__ + "." + self.instance.__class__.__name__
 
